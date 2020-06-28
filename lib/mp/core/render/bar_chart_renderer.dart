@@ -147,13 +147,13 @@ class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
         if (!viewPortHandler.isInBoundsRight(_barShadowRectBuffer.left)) break;
 
-        _barShadowRectBuffer = Rect.fromLTRB(
+        RRect finalBar = RRect.fromLTRBAndCorners(
             _barShadowRectBuffer.left,
             viewPortHandler.contentTop(),
             _barShadowRectBuffer.right,
-            viewPortHandler.contentBottom());
+            viewPortHandler.contentBottom() , topRight: Radius.circular(8) , topLeft: Radius.circular(8));
 
-        c.drawRect(_barShadowRectBuffer, _shadowPaint);
+        c.drawRRect(finalBar, _shadowPaint);
       }
     }
 
@@ -215,9 +215,9 @@ class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
                   buffer.buffer[j + 1]));
       }
 
-      c.drawRect(
-          Rect.fromLTRB(buffer.buffer[j], buffer.buffer[j + 1],
-              buffer.buffer[j + 2], buffer.buffer[j + 3]),
+      c.drawRRect(
+          RRect.fromLTRBAndCorners(buffer.buffer[j], buffer.buffer[j + 1],
+              buffer.buffer[j + 2], buffer.buffer[j + 3] ,topLeft: Radius.circular(5) , topRight: Radius.circular(5)),
           renderPaint);
 
       if (drawBorder) {
