@@ -47,17 +47,29 @@ abstract class ChartState<T extends Chart> extends State<T> {
 
     String fileName = DateTime.now().toIso8601String();
     String path = '$directory/$fileName.png';
-    _screenshotController.capture(path: path, pixelRatio: 3.0).then((imgFile) {
+    File imageFile = await _screenshotController
+        .capture(path: path, pixelRatio: 3.0)
+        .catchError((e) {
+      isCapturing = false;
+    });
+    await ImageGallerySaver.saveImage(
+            Uint8List.fromList(imageFile.readAsBytesSync()))
+        .catchError((e) {
+      isCapturing = false;
+    });
 
+    imageFile.delete();
+
+  /*  _screenshotController.capture(path: path, pixelRatio: 3.0).then((imgFile) {
       ImageGallerySaver.saveImage(Uint8List.fromList(imgFile.readAsBytesSync()))
           .then((dynamic value) {
-
         imgFile.delete();
       });
+
       isCapturing = false;
     }).catchError((error) {
       isCapturing = false;
-    });
+    });*/
   }
 
   @override
@@ -79,50 +91,48 @@ abstract class ChartState<T extends Chart> extends State<T> {
                 // Center is a layout widget. It takes a single child and positions it
                 // in the middle of the parent.
                 children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(
-                          minHeight: double.infinity,
-                          minWidth: double.infinity),
-                      child: OptimizedGestureDetector(
-                          tapDown: (details) {
-                            onTapDown(details);
-                          },
-                          singleTapUp: (details) {
-                            onSingleTapUp(details);
-                          },
-                          doubleTapUp: (details) {
-                            onDoubleTapUp(details);
-                          },
-                          moveStart: (details) {
-                            onMoveStart(details);
-                          },
-                          moveUpdate: (details) {
-                            onMoveUpdate(details);
-                          },
-                          moveEnd: (details) {
-                            onMoveEnd(details);
-                          },
-                          scaleStart: (details) {
-                            onScaleStart(details);
-                          },
-                          scaleUpdate: (details) {
-                            onScaleUpdate(details);
-                          },
-                          scaleEnd: (details) {
-                            onScaleEnd(details);
-                          },
-                          dragStart: (details){
-                            onDragStart(details);
-                          },
-                          dragUpdate: (details){
-                            onDragUpdate(details);
-                          },
-                          dragEnd: (details){
-                            onDragEnd(details);
-                          },
-                          child:
-                              CustomPaint(painter: widget.controller.painter))),
-                ])));
+              ConstrainedBox(
+                  constraints: BoxConstraints(
+                      minHeight: double.infinity, minWidth: double.infinity),
+                  child: OptimizedGestureDetector(
+                      tapDown: (details) {
+                        onTapDown(details);
+                      },
+                      singleTapUp: (details) {
+                        onSingleTapUp(details);
+                      },
+                      doubleTapUp: (details) {
+                        onDoubleTapUp(details);
+                      },
+                      moveStart: (details) {
+                        onMoveStart(details);
+                      },
+                      moveUpdate: (details) {
+                        onMoveUpdate(details);
+                      },
+                      moveEnd: (details) {
+                        onMoveEnd(details);
+                      },
+                      scaleStart: (details) {
+                        onScaleStart(details);
+                      },
+                      scaleUpdate: (details) {
+                        onScaleUpdate(details);
+                      },
+                      scaleEnd: (details) {
+                        onScaleEnd(details);
+                      },
+                      dragStart: (details) {
+                        onDragStart(details);
+                      },
+                      dragUpdate: (details) {
+                        onDragUpdate(details);
+                      },
+                      dragEnd: (details) {
+                        onDragEnd(details);
+                      },
+                      child: CustomPaint(painter: widget.controller.painter))),
+            ])));
   }
 
   @override
