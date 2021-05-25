@@ -49,16 +49,16 @@ abstract class ChartState<T extends Chart> extends State<T> {
     String path = '$directory/$fileName.png';
     File imageFile = await _screenshotController
         .capture(path: path, pixelRatio: 3.0)
-      .onError((error, stackTrace) {
+     /* .onError((error, stackTrace) {
       isCapturing = false;
 
-    });
+    })*/;
     await ImageGallerySaver.saveImage(
             Uint8List.fromList(imageFile.readAsBytesSync()))
-        .onError((error, stackTrace) {
+       /* .onError((error, stackTrace) {
       isCapturing = false;
 
-    });
+    })*/;
 
     imageFile.delete();
 
