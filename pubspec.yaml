@@ -8,7 +8,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  intl: ^0.16.1
+  intl: 0.17.0
   path_provider: ^1.2.0
   screenshot: ^0.2.0
   path_drawing: ^0.4.1
